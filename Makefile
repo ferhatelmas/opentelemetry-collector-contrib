@@ -22,6 +22,7 @@ ADDLICENCESE= addlicense
 MISSPELL=misspell -error
 MISSPELL_CORRECTION=misspell -w
 STATICCHECK=staticcheck
+RUN_CONFIG=local/config.yaml
 
 GIT_SHA=$(shell git rev-parse --short HEAD)
 BUILD_INFO_IMPORT_PATH=github.com/open-telemetry/opentelemetry-collector-contrib/internal/version
@@ -140,6 +141,10 @@ install-tools:
 .PHONY: otelcontribcol
 otelcontribcol:
 	GO111MODULE=on CGO_ENABLED=0 go build -o ./bin/$(GOOS)/otelcontribcol $(BUILD_INFO) ./cmd/otelcontribcol
+
+.PHONY: run
+run:
+	GO111MODULE=on go run --race ./cmd/otelcontribcol/... --config ${RUN_CONFIG}
 
 .PHONY: docker-component # Not intended to be used directly
 docker-component: check-component
